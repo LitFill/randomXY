@@ -1,5 +1,5 @@
-// randomXY, LitFill <author at email dot com>
-// program for ...
+// randomXY, LitFill <marrazzy54 at gmail dot com>
+// program for a cli returning a random combination of 2 ints for some purposes.
 package main
 
 import (
@@ -29,9 +29,10 @@ func newAddress(rows, cols int) Addrs {
 }
 
 func (as *Addrs) Shuffle() {
+	a := *as
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	r.Shuffle(len(*as), func(i, j int) {
-		(*as)[i], (*as)[j] = (*as)[j], (*as)[i]
+	r.Shuffle(len(a), func(i, j int) {
+		a[i], a[j] = a[j], a[i]
 	})
 }
 
@@ -49,10 +50,10 @@ func main() {
 	rows := flag.Int("r", 18, "[int] for rows")
 	cols := flag.Int("c", 8, "[int] for cols")
 	flag.Parse()
-	// rows, cols := 18, 8
-	// addrses := newAddress(rows, cols)
+
 	addrses := newAddress(*rows, *cols)
 	addrses.Shuffle()
+
 	for {
 		a, got := addrses.Get()
 		if !got {
@@ -60,5 +61,4 @@ func main() {
 		}
 		fmt.Printf("%s\n", a)
 	}
-
 }
