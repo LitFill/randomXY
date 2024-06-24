@@ -6,15 +6,23 @@ import (
 	"flag"
 	"fmt"
 	"math/rand"
-	"time"
 )
+
+var namaHari = []string{"Sen", "Sel", "Rab", "Kam", "Jum", "Sab"}
 
 type Address struct {
 	X, Y int
 }
 
 func (a Address) Get() (int, int) { return a.X, a.Y }
-func (a Address) String() string  { return fmt.Sprintf("addr: %d ⊗ %d", a.X, a.Y) }
+
+// func (a Address) String() string  { return fmt.Sprintf("addr: %d ⊗ %d", a.X, a.Y) }
+func (a Address) String() string {
+	hari := namaHari[a.X%6]
+	jam := a.X/6 + 1
+	kelas := rune('A' + a.Y)
+	return fmt.Sprintf("%s %d %c", hari, jam, kelas)
+}
 
 type Addrs []Address
 
@@ -30,10 +38,7 @@ func newAddress(rows, cols int) Addrs {
 
 func (as *Addrs) Shuffle() {
 	a := *as
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	r.Shuffle(len(a), func(i, j int) {
-		a[i], a[j] = a[j], a[i]
-	})
+	rand.Shuffle(len(a), func(i, j int) { a[i], a[j] = a[j], a[i] })
 }
 
 func (as *Addrs) Get() (Address, bool) {
